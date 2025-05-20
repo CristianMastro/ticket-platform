@@ -1,14 +1,17 @@
 package support.ticket_platform.model;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class Operatore {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +32,10 @@ public class Operatore {
     @NotNull
     private String password;
 
-    private boolean disponibilita = true;
+    private boolean disponibile = true;
+
+    @OneToMany(mappedBy = "user")
+    private List<Ticket> ticket;
 
     public Long getId() {
         return id;
@@ -63,12 +69,12 @@ public class Operatore {
         this.email = email;
     }
 
-    public boolean isDisponibilita() {
-        return disponibilita;
+    public boolean isDisponibile() {
+        return disponibile;
     }
 
-    public void setDisponibilita(boolean disponibilita) {
-        this.disponibilita = disponibilita;
+    public void setDisponibile(boolean disponibile) {
+        this.disponibile = disponibile;
     }
 
     public String getPassword() {
@@ -79,5 +85,12 @@ public class Operatore {
         this.password = password;
     }
 
+    public List<Ticket> getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(List<Ticket> ticket) {
+        this.ticket = ticket;
+    }
 
 }
