@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: headSito"></head>
+<body class="bg-info-subtle">
+    <div th:replace="fragments/header :: headerSito"></div>
+    <div class="container mt-5">
+        <h1 class="mb-4 text-center">Lista degli Operatori</h1>
+
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Disponibilità</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="utente : ${utenti}">
+                    <td th:text="${utente.nome}">Nome</td>
+                    <td th:text="${utente.email}">Email</td>
+                    <td>
+                        <span class="badge bg-success" th:if="${utente.disponibile}">Disponibile</span>
+                        <span class="badge bg-danger" th:if="${!utente.disponibile}">Non disponibile</span>
+                    </td>
+                    <td>
+                        <a th:href="@{/user/{id}(id=${utente.id})}" class="btn btn-sm btn-primary">Dettagli</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+</body>
+</html>

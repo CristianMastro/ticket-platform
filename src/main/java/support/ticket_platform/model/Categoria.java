@@ -19,8 +19,8 @@ public class Categoria {
     @NotNull
     private String tipo;
 
-    @OneToMany(mappedBy= "ticket")
-    private List<Ticket> ticket;
+    @OneToMany(mappedBy= "categoria")
+    private List<Ticket> tickets;
 
     public Long getId() {
         return id;
@@ -39,11 +39,11 @@ public class Categoria {
     }
 
     public List<Ticket> getTicket() {
-        return ticket;
+        return tickets;
     }
 
-    public void setTicket(List<Ticket> ticket) {
-        this.ticket = ticket;
+    public void setTicket(List<Ticket> tickets) {
+        this.tickets = tickets;
     }
 
     

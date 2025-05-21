@@ -6,16 +6,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import support.ticket_platform.model.Categoria;
 import support.ticket_platform.model.Ticket;
-import support.ticket_platform.model.Ticket.Stato;
 import support.ticket_platform.model.User;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-    
+
     List<Ticket> findByCategoria(Categoria categoria);
 
-    List<Ticket> findByStato(Stato stato);
+    List<Ticket> findByStato(String stato);
 
-    List<Ticket> findByOperatore(User operatore);
+    List<Ticket> findByUser(User user);
 
     List<Ticket> findByTitoloContainingIgnoreCase(String titolo);
 }
