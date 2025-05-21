@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: headSito"></head>
+<body class="bg-info-subtle">
+<div th:replace="fragments/header :: headerSito"></div>
+
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Ticket Creati</h1>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Titolo</th>
+                <th>Categoria</th>
+                <th>Assegnato a</th>
+                <th>Stato</th>
+                <th>Creato il</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="ticket : ${tickets}">
+                <td th:text="${ticket.titolo}"></td>
+                <td th:text="${ticket.categoria?.tipo}"></td>
+                <td th:text="${ticket.user?.id + ' ' + ticket.user?.nome + ' ' + ticket.user?.cognome}"></td>
+                <td>
+                    <span class="badge" th:classappend="${ticket.stato.name()} == 'DA_FARE' ? 'bg-secondary' :
+                                                        (${ticket.stato.name()} == 'IN_CORSO' ? 'bg-warning text-dark' :
+                                                        (${ticket.stato.name()} == 'CHIUSO' ? 'bg-success' : ''))"
+                                                        th:text="${ticket.stato.name()}"></span>
+                </td>
+                <td th:text="${#temporals.format(ticket.dataCreazione, 'dd/MM/yyyy')}"></td>
+                <td>
+                    <a th:href="@{/ticket/{id}(id=${ticket.id})}" class="btn btn-sm btn-success">Dettagli</a>
+                </td>
+                <td>
+                    <a href="@{/}" class="btn btn-sm btn-danger">Note</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div th:if="${#lists.isEmpty(tickets)}" class="alert alert-info text-center">
+        Nessun ticket creato al momento.
+    </div>
+</div>

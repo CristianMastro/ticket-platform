@@ -3,6 +3,7 @@ package support.ticket_platform.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import support.ticket_platform.model.User;
@@ -12,11 +13,8 @@ import support.ticket_platform.service.UserService;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepo;
-
-    public UserServiceImpl(UserRepository userRepo) {
-        this.userRepo = userRepo;
-    }
+    @Autowired
+    private UserRepository userRepo;
 
     @Override
     public List<User> findAll() {
@@ -44,7 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findDisponibili() {
-        return userRepo.findByDisponibileTrue();
+    public List<User> findByDisponibile(boolean disponibile) {
+        return userRepo.findByDisponibile(disponibile);
     }
 }

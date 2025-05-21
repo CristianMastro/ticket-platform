@@ -13,7 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Ticket {
@@ -26,14 +27,15 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long Id;
 
-    @NotNull
+    @Column(nullable = false)
+    @NotBlank(message="Il campo non può essere vuoto")
     private String titolo;
 
-    @Column(length = 2000)
-    @NotNull
+    @Column(length = 2000, nullable = false)
+    @Size(max = 2000, message = "La descrizione non può superare 2000 caratteri")
+    @NotBlank(message="Il campo non può essere vuoto.")
     private String descrizione;
 
-    @NotNull
     private LocalDateTime dataCreazione;
 
     //DICE A JPA COME SALVARE NEL DB IL CAMPO,LO SALVA COME STRINGA//
@@ -123,4 +125,18 @@ public class Ticket {
         this.note = note;
     }
 
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "id=" + Id +
+                ", titolo='" + titolo + '\'' +
+                ", descrizione='" + descrizione + '\'' +
+                ", dataCreazione=" + dataCreazione +
+                ", stato=" + stato +
+                ", categoria=" + (categoria != null ? categoria.getId() : "null") +
+                ", user=" + (user != null ? user.getId() : "null") +
+                '}';
+    }
+
+    
 }

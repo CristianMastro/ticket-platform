@@ -10,15 +10,14 @@
 
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title" th:text="${user.nome + ' ' + user.cognome}">Nome Cognome</h5>
-                <p class="card-text"><strong>Email:</strong> <span th:text="${user.email}">email@example.com</span></p>
+                <h5 class="card-title" th:text="${user.nome + ' ' + user.cognome}"></h5>
+                <p class="card-text"><strong>Email:</strong> <span th:text="${user.email}"></span></p>
 
                 <p class="card-text">
                     <strong>Disponibilità:</strong>
                     <span class="badge"
                           th:classappend="${user.disponibile} ? 'bg-success' : 'bg-danger'"
                           th:text="${user.disponibile} ? 'Disponibile' : 'Non disponibile'">
-                        Stato
                     </span>
                 </p>
 
@@ -60,7 +59,7 @@
                                 </span>
                             </td>
                             <td>
-                                <a th:href="@{/}" class="btn btn-sm btn-primary mb-1">Modifica</a>
+                                <a th:href="@{/}" class="btn btn-sm btn-primary mb-1">Visualizza</a>
                                 <a th:href="@{/}" class="btn btn-sm btn-warning mb-1">Aggiorna Stato</a>
                                 <a th:href="@{/}" class="btn btn-sm btn-info text-white mb-1">Aggiungi Nota</a>
                             </td>

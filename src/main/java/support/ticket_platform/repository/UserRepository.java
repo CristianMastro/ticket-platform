@@ -13,5 +13,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
     // TROVA SOLO OPERATORI DISPONIBILI //
-    List<User> findByDisponibileTrue();
+    List<User> findByDisponibile(boolean disponibile);
 }

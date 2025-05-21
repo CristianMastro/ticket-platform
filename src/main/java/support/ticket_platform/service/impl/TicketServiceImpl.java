@@ -2,6 +2,7 @@ package support.ticket_platform.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import support.ticket_platform.model.Categoria;
@@ -13,11 +14,8 @@ import support.ticket_platform.service.TicketService;
 @Service
 public class TicketServiceImpl implements TicketService {
 
-    private final TicketRepository ticketRepository;
-
-    public TicketServiceImpl(TicketRepository ticketRepository) {
-        this.ticketRepository = ticketRepository;
-    }
+    @Autowired
+    private TicketRepository ticketRepository;
 
     @Override
     public List<Ticket> findAll() {

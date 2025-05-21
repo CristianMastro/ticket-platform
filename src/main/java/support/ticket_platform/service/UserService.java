@@ -12,5 +12,5 @@ public interface UserService {
     Optional<User> findByEmail(String email);
     User save(User user);
     void deleteById(Long id);
-    List<User> findDisponibili(); // Operatori disponibili
+    List<User> findByDisponibile(boolean disponibile); // Operatori disponibili
 }
