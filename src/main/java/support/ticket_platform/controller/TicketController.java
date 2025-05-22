@@ -23,6 +23,7 @@ import support.ticket_platform.service.NotaService;
 import support.ticket_platform.service.TicketService;
 import support.ticket_platform.service.UserService;
 
+
 @Controller
 public class TicketController {
     
@@ -69,7 +70,7 @@ public class TicketController {
 
     //POST PER LA CREAZIONE
     @PostMapping("/ticket/create")
-    public String createTicket(@Valid @ModelAttribute("ticket") Ticket ticket, 
+    public String create(@Valid @ModelAttribute("ticket") Ticket ticket, 
                                 BindingResult bindingResult, Model model) {
 
         // Se ci sono errori di validazione torna al form con i dati necessari
@@ -116,7 +117,7 @@ public class TicketController {
 
     //POST PER MODIFICA TICKET
     @PostMapping("/ticket/edit/{id}")
-    public String updateTicket(@PathVariable Long id,
+    public String edit(@PathVariable Long id,
                             @Valid @ModelAttribute("ticket") Ticket ticket,
                            BindingResult bindingResult,
                            Model model) {
@@ -164,8 +165,17 @@ public class TicketController {
         return "ticket/show";
     }
 
-
-
-
-
+    //POST PER CANCELLARE TICKET
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Long id) {
+        
+        //PER OGNI TICKET CANCELLO LE NOTE ASSOCIATE//
+        Ticket ticket = ticketService.findById(id);
+        for (Nota note : ticket.getNote()){
+            notaService.deleteById(note.getId());
+        }
+        ticketService.deleteById(id);
+        return "redirect:/tickets";
+    }
+    
 }

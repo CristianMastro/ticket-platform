@@ -26,6 +26,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -48,6 +49,13 @@
                 </td>
                 <td>
                     <a th:href="@{/note/create(ticketId=${ticket.id})}" class="btn btn-sm btn-warning text-black">Note</a>
+                </td>
+                <td>
+                    <form th:action="@{/delete/{id}(id=${ticket.id})}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger text-black" onclick="return confirm('Sei sicuro di voler eliminare questo ticket?');">
+                            Elimina
+                        </button>
+                    </form>
                 </td>
             </tr>
         </tbody>
