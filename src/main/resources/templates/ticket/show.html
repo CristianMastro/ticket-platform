@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: headSito"></head>
+<body class="bg-info-subtle">
+    <div th:replace="fragments/header :: headerSito"></div>
+
+    <div class="container py-5 d-flex justify-content-center">
+        <div class="card shadow-lg rounded-4 p-4" style="width: 100%; max-width: 700px;">
+            <h3 class="card-title mb-4 text-center" th:text="${ticket.titolo}"></h3>
+
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between">
+                    <strong>Titolo:</strong>
+                    <span th:text="${ticket.titolo}"></span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <strong>Descrizione:</strong>
+                    <span th:text="${ticket.descrizione}"></span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <strong>Assegnato a:</strong>
+                    <span th:text="${ticket.user.nome + ' ' + ticket.user.cognome}"></span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <strong>Categoria:</strong>
+                    <span th:text="${ticket.categoria.tipo}"></span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <strong>Stato:</strong>
+                    <span th:text="${ticket.stato}"></span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <strong>Data creazione:</strong>
+                    <span th:text="${#temporals.format(ticket.dataCreazione, 'dd/MM/yyyy')}"></span>
+                </li>
+            </ul>
+
+            <div class="text-center mt-4">
+                <a th:href="@{/tickets}" class="btn btn-secondary">Torna alla lista</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

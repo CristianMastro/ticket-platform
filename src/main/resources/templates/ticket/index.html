@@ -17,6 +17,7 @@
                 <th>Creato il</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -32,10 +33,13 @@
                 </td>
                 <td th:text="${#temporals.format(ticket.dataCreazione, 'dd/MM/yyyy')}"></td>
                 <td>
-                    <a th:href="@{/ticket/{id}(id=${ticket.id})}" class="btn btn-sm btn-success">Dettagli</a>
+                    <a th:href="@{/ticket/show/{id}(id=${ticket.id})}" class="btn btn-sm btn-success">Dettagli</a>
                 </td>
                 <td>
-                    <a href="@{/}" class="btn btn-sm btn-danger">Note</a>
+                    <a th:href="@{/}" class="btn btn-sm btn-warning">Note</a>
+                </td>
+                <td>
+                    <a th:href="@{/ticket/edit/{id}(id=${ticket.id})}" class="btn btn-sm btn-danger">Modifica</a>
                 </td>
             </tr>
         </tbody>

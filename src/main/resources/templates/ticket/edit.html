@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: headSito"></head>
+<body class="bg-info-subtle">
+    <div th:replace="fragments/header :: headerSito"></div>
+
+    <div class="container mt-5">
+    <h1 class="mb-4 text-center">Modifica Ticket</h1>
+
+    <form th:action="@{/ticket/edit/{id}(id=${ticket.id})}" th:object="${ticket}" method="post" novalidate>
+
+        <!-- TITOLO -->
+        <div class="mb-3">
+        <label for="titolo" class="form-label">Titolo</label>
+        <input type="text" th:field="*{titolo}" id="titolo" class="form-control"
+                th:classappend="${#fields.hasErrors('titolo')} ? 'is-invalid' : ''"
+                placeholder="Inserisci il titolo">
+        <div class="invalid-feedback" th:errors="*{titolo}"></div>
+        </div>
+
+        <!-- DESCRIZIONE -->
+        <div class="mb-3">
+        <label for="descrizione" class="form-label">Descrizione</label>
+        <textarea th:field="*{descrizione}" id="descrizione" rows="4" class="form-control"
+                    th:classappend="${#fields.hasErrors('descrizione')} ? 'is-invalid' : ''"
+                    placeholder="Massimo 2000 caratteri"></textarea>
+        <div class="invalid-feedback" th:errors="*{descrizione}"></div>
+        </div>
+
+        <!-- OPERATORE -->
+        <div class="mb-3">
+        <label for="user" class="form-label">Assegna a</label>
+        <select th:field="*{user.id}" id="user" class="form-select"
+                th:classappend="${#fields.hasErrors('user.id')} ? 'is-invalid'">
+            <option value="" disabled>-- Seleziona un operatore --</option>
+            <option th:each="u : ${utentiDisponibili}"
+                    th:value="${u.id}"
+                    th:selected="${ticket.user != null} ? ${ticket.user.id == u.id}"
+                    th:text="${u.nome + ' ' + u.cognome}"></option>
+        </select>
+        <div class="invalid-feedback" th:errors="*{user.id}"></div>
+        </div>
+
+        <!-- CATEGORIA -->
+        <div class="mb-3">
+        <label for="categoria" class="form-label">Categoria</label>
+        <select th:field="*{categoria.id}" id="categoria" class="form-select"
+                th:classappend="${#fields.hasErrors('categoria.id')} ? 'is-invalid'">
+            <option value="" disabled>-- Seleziona una categoria --</option>
+            <option th:each="c : ${categorie}"
+                    th:value="${c.id}"
+                    th:selected="${ticket.categoria != null} ? ${ticket.categoria.id == c.id}"
+                    th:text="${c.tipo}"></option>
+        </select>
+        <div class="invalid-feedback" th:errors="*{categoria.id}"></div>
+        </div>
+
+        <!-- BOTTONI -->
+        <div class="text-center mb-4">
+        <button type="submit" class="btn btn-warning">Aggiorna Ticket</button>
+        <a th:href="@{/tickets}" class="btn btn-secondary ms-2">Annulla</a>
+        </div>
+    </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

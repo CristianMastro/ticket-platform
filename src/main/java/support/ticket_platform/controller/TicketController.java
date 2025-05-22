@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.validation.Valid;
@@ -31,6 +32,7 @@ public class TicketController {
     @Autowired
     private CategoriaService categoriaService;
 
+    //GET PER LISTA DI TICKET
     @GetMapping("/tickets")
     public String index(Model model) {
 
@@ -39,6 +41,7 @@ public class TicketController {
         return "ticket/index";
     }
 
+    //GET PER CREAZIONE
     @GetMapping("/ticket/create")
     public String create(Model model) {
    
@@ -52,37 +55,101 @@ public class TicketController {
         return "ticket/create";
     }
 
+    //POST PER LA CREAZIONE
     @PostMapping("/ticket/create")
     public String createTicket(@Valid @ModelAttribute("ticket") Ticket ticket, 
                                 BindingResult bindingResult, Model model) {
 
-    // Se ci sono errori di validazione torna al form con i dati necessari
-    if (bindingResult.hasErrors()) {
+        // Se ci sono errori di validazione torna al form con i dati necessari
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("categorie", categoriaService.findAll());
+            model.addAttribute("utentiDisponibili", userService.findByDisponibile(true));
+            return "ticket/create";
+        }
+
+        // Recupera l'utente completo dal DB tramite id selezionato
+        User user = userService.findById(ticket.getUser().getId());
+        ticket.setUser(user);
+
+        // Recupera la categoria completa dal DB tramite id selezionato
+        Categoria categoria = categoriaService.findById(ticket.getCategoria().getId());
+        ticket.setCategoria(categoria);
+
+        // Imposta la data di creazione con l'ora corrente
+        ticket.setDataCreazione(LocalDateTime.now());
+
+        // Imposta lo stato di default (es. DA_FARE) se non è stato già settato
+        if (ticket.getStato() == null) {
+            ticket.setStato(Ticket.Stato.DA_FARE);
+        }
+
+        // Salva il ticket
+        ticketService.save(ticket);
+
+        // Redirect alla lista ticket dopo il salvataggio
+        return "redirect:/tickets";
+    }
+
+    //GET PER LETTURA TICKET IN MODIFICA
+    @GetMapping("/ticket/edit/{id}")
+    public String edit(@PathVariable("id") Long id, Model model) {
+        Ticket ticket = ticketService.findById(id);
+
+        model.addAttribute("ticket", ticket);
         model.addAttribute("categorie", categoriaService.findAll());
         model.addAttribute("utentiDisponibili", userService.findByDisponibile(true));
-        return "ticket/create";
+
+        return "ticket/edit";
     }
 
-    // Recupera l'utente completo dal DB tramite id selezionato
-    User user = userService.findById(ticket.getUser().getId());
-    ticket.setUser(user);
+    //POST PER MODIFICA TICKET
+    @PostMapping("/ticket/edit/{id}")
+    public String updateTicket(@PathVariable Long id,
+                            @Valid @ModelAttribute("ticket") Ticket ticket,
+                           BindingResult bindingResult,
+                           Model model) {
 
-    // Recupera la categoria completa dal DB tramite id selezionato
-    Categoria categoria = categoriaService.findById(ticket.getCategoria().getId());
-    ticket.setCategoria(categoria);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("categorie", categoriaService.findAll());
+            model.addAttribute("utentiDisponibili", userService.findByDisponibile(true));
+            return "ticket/edit";
+        }
 
-    // Imposta la data di creazione con l'ora corrente
-    ticket.setDataCreazione(LocalDateTime.now());
+        // Recupera il ticket originale dal DB
+        Ticket ticketCopia = ticketService.findById(id);
 
-    // Imposta lo stato di default (es. DA_FARE) se non è stato già settato
-    if (ticket.getStato() == null) {
-        ticket.setStato(Ticket.Stato.DA_FARE);
+        // Aggiorna i campi modificabili
+        ticketCopia.setTitolo(ticket.getTitolo());
+        ticketCopia.setDescrizione(ticket.getDescrizione());
+
+        // Recupera e imposta l'utente 
+        User user = userService.findById(ticket.getUser().getId());
+        ticketCopia.setUser(user);
+
+        // Recupera e imposta la categoria
+        Categoria categoria = categoriaService.findById(ticket.getCategoria().getId());
+        ticketCopia.setCategoria(categoria);
+
+        //copia lo stato
+        ticketCopia.setStato(ticket.getStato());
+
+        // Salva 
+        ticketService.save(ticketCopia);
+
+        return "redirect:/tickets";
     }
 
-    // Salva il ticket
-    ticketService.save(ticket);
+    //GET PER LETTURA DEL SINGOLO TICKET
+    @GetMapping("/ticket/show/{id}")
+    public String show(@PathVariable Long id, Model model) {
 
-    // Redirect alla lista ticket dopo il salvataggio
-    return "redirect:/tickets";
-}
+        Ticket ticket = ticketService.findById(id);
+        model.addAttribute("ticket", ticket);
+        return "ticket/show";
+    }
+
+
+
+
+
 }
