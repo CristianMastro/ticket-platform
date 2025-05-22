@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
 import support.ticket_platform.model.Categoria;
@@ -34,10 +35,16 @@ public class TicketController {
 
     //GET PER LISTA DI TICKET
     @GetMapping("/tickets")
-    public String index(Model model) {
+    public String listTickets(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
 
-        List<Ticket> listaTicket = ticketService.findAll();
-        model.addAttribute("tickets", listaTicket);
+        //RICERCA PER NOME
+        List<Ticket> tickets;
+        if (keyword != null && !keyword.isEmpty()) {
+            tickets = ticketService.findByTitoloContainingIgnoreCase(keyword);
+        } else {
+            tickets = ticketService.findAll();
+        }
+        model.addAttribute("tickets", tickets);
         return "ticket/index";
     }
 
