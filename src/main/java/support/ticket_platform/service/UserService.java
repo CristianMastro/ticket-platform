@@ -13,4 +13,5 @@ public interface UserService {
     User save(User user);
     void deleteById(Long id);
     List<User> findByDisponibile(boolean disponibile); // Operatori disponibili
+    Optional<User> findByUsername(String username);
 }

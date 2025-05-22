@@ -45,4 +45,9 @@ public class UserServiceImpl implements UserService {
     public List<User> findByDisponibile(boolean disponibile) {
         return userRepo.findByDisponibile(disponibile);
     }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userRepo.findByUsername(username);
+    }
 }

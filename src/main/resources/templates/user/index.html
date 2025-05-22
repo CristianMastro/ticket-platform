@@ -9,7 +9,8 @@
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
-                    <th>Nome</th>
+                    <th>Id</th>
+                    <th>Username</th>
                     <th>Email</th>
                     <th>Disponibilità</th>
                     <th>Azioni</th>
@@ -17,8 +18,9 @@
             </thead>
             <tbody>
                 <tr th:each="utente : ${utenti}">
-                    <td th:text="${utente.nome}">Nome</td>
-                    <td th:text="${utente.email}">Email</td>
+                    <td th:text="${utente.id}"></td>
+                    <td th:text="${utente.username}"></td>
+                    <td th:text="${utente.email}"></td>
                     <td>
                         <span class="badge bg-success" th:if="${utente.disponibile}">Disponibile</span>
                         <span class="badge bg-danger" th:if="${!utente.disponibile}">Non disponibile</span>

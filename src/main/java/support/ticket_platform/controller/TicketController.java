@@ -131,7 +131,9 @@ public class TicketController {
         ticketCopia.setCategoria(categoria);
 
         //copia lo stato
-        ticketCopia.setStato(ticket.getStato());
+        if (ticket.getStato() == null) {
+        ticket.setStato(Ticket.Stato.DA_FARE);
+        }
 
         // Salva 
         ticketService.save(ticketCopia);

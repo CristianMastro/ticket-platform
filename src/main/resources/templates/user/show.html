@@ -10,7 +10,7 @@
 
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title" th:text="${user.nome + ' ' + user.cognome}"></h5>
+                <h5 class="card-title" th:text="${user.nome + ' ' + user.cognome + ' ' + user.username + ' id:' + user.id }"></h5>
                 <p class="card-text"><strong>Email:</strong> <span th:text="${user.email}"></span></p>
 
                 <p class="card-text">
@@ -44,23 +44,27 @@
                             <th>Titolo</th>
                             <th>Stato</th>
                             <th>Descrizione</th>
-                            <th>Azioni</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="ticket : ${ticketAssegnati}">
-                            <td th:text="${ticket.id}">1</td>
-                            <td th:text="${ticket.titolo}">Titolo</td>
+                            <td th:text="${ticket.id}"></td>
+                            <td th:text="${ticket.titolo}"></td>
                             <td>
-                                <span class="badge"
-                                    th:classappend="${ticket.stato == 'aperto'} ? 'bg-success' : 'bg-secondary'"
-                                    th:text="${ticket.stato}">
-                                    Stato
-                                </span>
+                                <span class="badge" th:classappend="${ticket.stato.name()} == 'DA_FARE' ? 'bg-secondary' :
+                                                        (${ticket.stato.name()} == 'IN_CORSO' ? 'bg-warning text-dark' :
+                                                        (${ticket.stato.name()} == 'CHIUSO' ? 'bg-success' : ''))"
+                                                        th:text="${ticket.stato.name()}"></span>
                             </td>
                             <td>
-                                <a th:href="@{/}" class="btn btn-sm btn-primary mb-1">Visualizza</a>
+                                <a th:href="@{/ticket/show/{id}(id=${ticket.id})}" class="btn btn-sm btn-primary mb-1">Visualizza</a>
+                            </td>
+                            <td>
                                 <a th:href="@{/}" class="btn btn-sm btn-warning mb-1">Aggiorna Stato</a>
+                            </td>
+                            <td>
                                 <a th:href="@{/}" class="btn btn-sm btn-info text-white mb-1">Aggiungi Nota</a>
                             </td>
                         </tr>

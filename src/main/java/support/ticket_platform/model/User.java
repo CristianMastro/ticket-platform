@@ -34,6 +34,9 @@ public class User {
 
     private boolean disponibile = true;
 
+    @Column(unique = true, nullable = false)
+    private String username;
+
     @OneToMany(mappedBy = "user")
     private List<Ticket> ticket;
 
@@ -91,6 +94,14 @@ public class User {
 
     public void setTicket(List<Ticket> ticket) {
         this.ticket = ticket;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
 }

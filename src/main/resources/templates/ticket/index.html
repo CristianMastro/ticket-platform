@@ -7,14 +7,18 @@
 <div class="container mt-5">
     <h1 class="mb-4 text-center">Ticket Creati</h1>
 
+    <div class="d-flex justify-content-end mb-3">
+    <a th:href="@{/ticket/create}" class="btn btn-dark">Nuovo Ticket</a>
+</div>
+
     <table class="table table-bordered table-striped table-hover">
         <thead class="table-dark">
             <tr>
                 <th>Titolo</th>
                 <th>Categoria</th>
-                <th>Assegnato a</th>
+                <th>Operatore</th>
                 <th>Stato</th>
-                <th>Creato il</th>
+                <th>Creato</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -24,7 +28,7 @@
             <tr th:each="ticket : ${tickets}">
                 <td th:text="${ticket.titolo}"></td>
                 <td th:text="${ticket.categoria?.tipo}"></td>
-                <td th:text="${ticket.user?.id + ' ' + ticket.user?.nome + ' ' + ticket.user?.cognome}"></td>
+                <td th:text="${ticket.user?.id + ' ' + ticket.user?.username}"></td>
                 <td>
                     <span class="badge" th:classappend="${ticket.stato.name()} == 'DA_FARE' ? 'bg-secondary' :
                                                         (${ticket.stato.name()} == 'IN_CORSO' ? 'bg-warning text-dark' :
@@ -36,10 +40,10 @@
                     <a th:href="@{/ticket/show/{id}(id=${ticket.id})}" class="btn btn-sm btn-success">Dettagli</a>
                 </td>
                 <td>
-                    <a th:href="@{/}" class="btn btn-sm btn-warning">Note</a>
+                    <a th:href="@{/ticket/edit/{id}(id=${ticket.id})}" class="btn btn-sm btn-danger">Modifica</a>
                 </td>
                 <td>
-                    <a th:href="@{/ticket/edit/{id}(id=${ticket.id})}" class="btn btn-sm btn-danger">Modifica</a>
+                    <a th:href="@{/tickets}" class="btn btn-sm btn-warning">Note</a>
                 </td>
             </tr>
         </tbody>

@@ -14,12 +14,8 @@
                     <span th:text="${ticket.titolo}"></span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
-                    <strong>Descrizione:</strong>
-                    <span th:text="${ticket.descrizione}"></span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between">
                     <strong>Assegnato a:</strong>
-                    <span th:text="${ticket.user.nome + ' ' + ticket.user.cognome}"></span>
+                    <span th:text="${ticket.user.id + ' ' + ticket.user.username}"></span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
                     <strong>Categoria:</strong>
@@ -32,6 +28,10 @@
                 <li class="list-group-item d-flex justify-content-between">
                     <strong>Data creazione:</strong>
                     <span th:text="${#temporals.format(ticket.dataCreazione, 'dd/MM/yyyy')}"></span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <strong>Descrizione:</strong>
+                    <span th:text="${ticket.descrizione}"></span>
                 </li>
             </ul>
 
