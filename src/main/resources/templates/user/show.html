@@ -59,13 +59,13 @@
                                                         th:text="${ticket.stato.name()}"></span>
                             </td>
                             <td>
-                                <a th:href="@{/ticket/show/{id}(id=${ticket.id})}" class="btn btn-sm btn-primary mb-1">Visualizza</a>
+                                <a th:href="@{/ticket/show/{id}(id=${ticket.id})}" class="btn btn-sm btn-success text-black mb-1">Dettagli</a>
                             </td>
                             <td>
-                                <a th:href="@{/}" class="btn btn-sm btn-warning mb-1">Aggiorna Stato</a>
+                                <a th:href="@{/}" class="btn btn-sm btn-danger text-black mb-1">Aggiorna Stato</a>
                             </td>
                             <td>
-                                <a th:href="@{/}" class="btn btn-sm btn-info text-white mb-1">Aggiungi Nota</a>
+                                <a th:href="@{/}" class="btn btn-sm btn-warning text-black mb-1">Aggiungi Nota</a>
                             </td>
                         </tr>
                     </tbody>

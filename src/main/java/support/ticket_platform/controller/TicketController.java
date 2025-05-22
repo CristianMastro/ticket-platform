@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
 import support.ticket_platform.model.Categoria;
+import support.ticket_platform.model.Nota;
 import support.ticket_platform.model.Ticket;
 import support.ticket_platform.model.User;
 import support.ticket_platform.service.CategoriaService;
+import support.ticket_platform.service.NotaService;
 import support.ticket_platform.service.TicketService;
 import support.ticket_platform.service.UserService;
 
@@ -32,6 +34,9 @@ public class TicketController {
 
     @Autowired
     private CategoriaService categoriaService;
+
+    @Autowired
+    private NotaService notaService;
 
     //GET PER LISTA DI TICKET
     @GetMapping("/tickets")
@@ -153,7 +158,9 @@ public class TicketController {
     public String show(@PathVariable Long id, Model model) {
 
         Ticket ticket = ticketService.findById(id);
+        List<Nota> note = notaService.findByTicketId(id);
         model.addAttribute("ticket", ticket);
+        model.addAttribute("note", note);  // Aggiungi le note al modello
         return "ticket/show";
     }
 

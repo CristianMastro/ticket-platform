@@ -41,13 +41,13 @@
                 </td>
                 <td th:text="${#temporals.format(ticket.dataCreazione, 'dd/MM/yyyy')}"></td>
                 <td>
-                    <a th:href="@{/ticket/show/{id}(id=${ticket.id})}" class="btn btn-sm btn-success">Dettagli</a>
+                    <a th:href="@{/ticket/show/{id}(id=${ticket.id})}" class="btn btn-sm btn-success text-black">Dettagli</a>
                 </td>
                 <td>
-                    <a th:href="@{/ticket/edit/{id}(id=${ticket.id})}" class="btn btn-sm btn-danger">Modifica</a>
+                    <a th:href="@{/ticket/edit/{id}(id=${ticket.id})}" class="btn btn-sm btn-info text-black">Modifica</a>
                 </td>
                 <td>
-                    <a th:href="@{/tickets}" class="btn btn-sm btn-warning">Note</a>
+                    <a th:href="@{/note/create(ticketId=${ticket.id})}" class="btn btn-sm btn-warning text-black">Note</a>
                 </td>
             </tr>
         </tbody>

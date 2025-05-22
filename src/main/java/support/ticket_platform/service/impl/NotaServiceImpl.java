@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import support.ticket_platform.model.Nota;
-import support.ticket_platform.model.Ticket;
 import support.ticket_platform.repository.NotaRepository;
 import support.ticket_platform.service.NotaService;
 
@@ -24,8 +23,13 @@ public class NotaServiceImpl implements NotaService {
     }
 
     @Override
-    public List<Nota> findByTicket(Ticket ticket) {
-        return notaRepository.findByTicket(ticket);
+    public Nota findById(Long id) {
+        return notaRepository.findById(id).orElseThrow(() -> new RuntimeException("Nota non trovata"));
+    }
+
+    @Override
+    public List<Nota> findByTicketId(Long ticketId) {
+        return notaRepository.findByTicketId(ticketId);
     }
 
     @Override

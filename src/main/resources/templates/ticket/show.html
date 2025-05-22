@@ -4,7 +4,9 @@
 <body class="bg-info-subtle">
     <div th:replace="fragments/header :: headerSito"></div>
 
-    <div class="container py-5 d-flex justify-content-center">
+    <div class="container py-5 d-flex flex-column align-items-center gap-4">
+
+        <!-- CARD DETTAGLIO TICKET -->
         <div class="card shadow-lg rounded-4 p-4" style="width: 100%; max-width: 700px;">
             <h3 class="card-title mb-4 text-center" th:text="${ticket.titolo}"></h3>
 
@@ -39,6 +41,42 @@
                 <a th:href="@{/tickets}" class="btn btn-secondary">Torna alla lista</a>
             </div>
         </div>
+
+        <!-- CARD NOTE -->
+        <div class="card shadow-lg rounded-4 p-4" style="width: 100%; max-width: 700px;">
+            <div class="card-header bg-secondary text-white rounded-3 mb-3">
+                <h5 class="mb-0">Note associate</h5>
+            </div>
+            <div class="card-body p-0">
+                <div th:if="${#lists.isEmpty(note)}">
+                    <p>Nessuna nota presente per questo ticket.</p>
+                </div>
+                <ul class="list-group" th:if="${!#lists.isEmpty(note)}">
+                    <li class="list-group-item" th:each="nota : ${note}">
+                        <p th:text="${nota.testo}" class="mb-1"></p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                Scritta da: 
+                                <span th:if="${nota.autore != null}" th:text="${nota.autore}"></span>
+                                <span th:if="${nota.autore == null}">SYSTEM</span>
+                                -
+                                <span th:text="${#temporals.format(nota.dataCreazione, 'dd/MM/yyyy')}"></span>
+                            </small>
+                            <div style="white-space: nowrap;">
+                                <a th:href="@{'/note/edit/' + ${nota.id}}" class="btn btn-sm btn-warning text-black me-2">
+                                    Modifica
+                                </a>
+                                <a th:href="@{'/note/delete/' + ${nota.id}}" class="btn btn-sm btn-danger text-black"
+                                   onclick="return confirm('Sei sicuro di voler eliminare questa nota?');">
+                                    Elimina
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
