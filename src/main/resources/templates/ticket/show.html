@@ -6,14 +6,28 @@
 
     <div class="container py-5 d-flex flex-column align-items-center gap-4">
 
-        <!-- CARD DETTAGLIO TICKET -->
-        <div class="card shadow-lg rounded-4 p-4" style="width: 100%; max-width: 700px;">
-            <h3 class="card-title mb-4 text-center" th:text="${ticket.titolo}"></h3>
+       <div class="card shadow-lg rounded-4 p-4" style="width: 100%; max-width: 700px;">
 
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="card-title m-0 text-break" th:text="${ticket.id} + ' Ticket'"></h3>
+
+                <form th:action="@{/ticket/stato/{id}(id=${ticket.id})}" method="post" class="d-flex align-items-center gap-2">
+                    <select name="stato" class="form-select form-select-sm" style="width: auto;">
+                        <option th:each="s : ${stati}"
+                                th:value="${s}"
+                                th:text="${s}"
+                                th:selected="${s == ticket.stato}">
+                        </option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-primary text-black">Aggiorna</button>
+                </form>
+            </div>
+
+            <!-- DETTAGLI TICKET -->
             <ul class="list-group list-group-flush">
                 <li class="list-group-item d-flex justify-content-between">
                     <strong>Titolo:</strong>
-                    <span th:text="${ticket.titolo}"></span>
+                    <span class="text-break" th:text="${ticket.titolo}"></span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
                     <strong>Assegnato a:</strong>
@@ -33,7 +47,7 @@
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
                     <strong>Descrizione:</strong>
-                    <span th:text="${ticket.descrizione}"></span>
+                    <span class="text-break" th:text="${ticket.descrizione}"></span>
                 </li>
             </ul>
 

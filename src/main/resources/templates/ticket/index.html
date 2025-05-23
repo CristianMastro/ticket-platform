@@ -31,15 +31,10 @@
         </thead>
         <tbody>
             <tr th:each="ticket : ${tickets}">
-                <td th:text="${ticket.titolo}"></td>
+                <td th:text="${ticket.titolo.length() > 10 ? ticket.titolo.substring(0, 10) + '...' : ticket.titolo}"></td>
                 <td th:text="${ticket.categoria?.tipo}"></td>
                 <td th:text="${ticket.user?.id + ' ' + ticket.user?.username}"></td>
-                <td>
-                    <span class="badge" th:classappend="${ticket.stato.name()} == 'DA_FARE' ? 'bg-secondary' :
-                                                        (${ticket.stato.name()} == 'IN_CORSO' ? 'bg-warning text-dark' :
-                                                        (${ticket.stato.name()} == 'CHIUSO' ? 'bg-success' : ''))"
-                                                        th:text="${ticket.stato.name()}"></span>
-                </td>
+                <td th:text="${ticket.stato}"></td>
                 <td th:text="${#temporals.format(ticket.dataCreazione, 'dd/MM/yyyy')}"></td>
                 <td>
                     <a th:href="@{/ticket/show/{id}(id=${ticket.id})}" class="btn btn-sm btn-success text-black">Dettagli</a>

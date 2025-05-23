@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import support.ticket_platform.model.Categoria;
 import support.ticket_platform.model.Nota;
 import support.ticket_platform.model.Ticket;
+import support.ticket_platform.model.Ticket.Stato;
 import support.ticket_platform.model.User;
 import support.ticket_platform.service.CategoriaService;
 import support.ticket_platform.service.NotaService;
@@ -162,6 +163,7 @@ public class TicketController {
         List<Nota> note = notaService.findByTicketId(id);
         model.addAttribute("ticket", ticket);
         model.addAttribute("note", note);  // Aggiungi le note al modello
+        model.addAttribute("stati", Stato.values()); //Aggiungi gli stati al modello
         return "ticket/show";
     }
 
@@ -177,5 +179,14 @@ public class TicketController {
         ticketService.deleteById(id);
         return "redirect:/tickets";
     }
-    
+
+    @PostMapping("/ticket/stato/{id}")
+    public String updateStato(@PathVariable Long id, @RequestParam("stato") Stato stato) {
+        
+        Ticket ticket = ticketService.findById(id);
+        ticket.setStato(stato);
+        ticketService.save(ticket);
+        return "redirect:/ticket/show/" + id;  // torna sempre al dettaglio aggiornato
+    }
+
 }
