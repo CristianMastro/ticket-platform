@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -40,7 +41,7 @@ public class NotaController {
 
     //POST PER FORM NOTE (DA SISTEMARE QUANDO IMPLEMENTO SECURITY)
     @PostMapping("/note/create")
-    public String saveNota(@Valid @ModelAttribute("nota") Nota nota,
+    public String create(@Valid @ModelAttribute("nota") Nota nota,
                        BindingResult bindingResult,
                        Model model) {
 
@@ -64,4 +65,14 @@ public class NotaController {
         notaService.save(nota);
         return "redirect:/ticket/show/" + ticket.getId();
     }
+
+    //POST PER CANCELLARE NOTE
+    @PostMapping("/note/delete/{id}")
+        public String delete(@PathVariable("id") Long id) {
+
+            Nota nota = notaService.findById(id);
+            Long ticketId = nota.getTicket().getId();
+            notaService.deleteById(id);
+            return "redirect:/ticket/show/" + ticketId;
+        }
 }

@@ -66,10 +66,12 @@
                                 <a th:href="@{'/note/edit/' + ${nota.id}}" class="btn btn-sm btn-warning text-black me-2">
                                     Modifica
                                 </a>
-                                <a th:href="@{'/note/delete/' + ${nota.id}}" class="btn btn-sm btn-danger text-black"
-                                   onclick="return confirm('Sei sicuro di voler eliminare questa nota?');">
-                                    Elimina
-                                </a>
+                                <form th:action="@{/note/delete/{id}(id=${nota.id})}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger text-dark"
+                                            onclick="return confirm('Sei sicuro di voler eliminare questa nota?');">
+                                        Elimina
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </li>
