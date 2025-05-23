@@ -21,9 +21,11 @@
                     </span>
                 </p>
 
-                <a th:href="@{/user/{id}/toggle(id=${user.id})}" class="btn btn-warning mt-3">
-                    Cambia disponibilità
-                </a>
+                <form th:action="@{/user/{id}/disponibilita(id=${user.id})}" method="post">
+                    <button type="submit" class="btn btn-warning">Cambia disponibilità</button>
+                </form>
+                <div th:if="${successMessage}" class="alert alert-success mt-2" role="alert" th:text="${successMessage}"></div>
+                <div th:if="${errorMessage}" class="alert alert-danger mt-2" role="alert" th:text="${errorMessage}"></div>
             </div>
         </div>
 

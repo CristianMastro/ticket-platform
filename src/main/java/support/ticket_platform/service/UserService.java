@@ -14,4 +14,5 @@ public interface UserService {
     void deleteById(Long id);
     List<User> findByDisponibile(boolean disponibile); // Operatori disponibili
     Optional<User> findByUsername(String username);
+    
 }

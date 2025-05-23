@@ -7,8 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import support.ticket_platform.model.Ticket;
+import support.ticket_platform.model.Ticket.Stato;
 import support.ticket_platform.model.User;
 import support.ticket_platform.service.TicketService;
 import support.ticket_platform.service.UserService;
@@ -38,6 +41,29 @@ public class UserController {
         model.addAttribute("user", userService.findById(id));
         model.addAttribute("ticketAssegnati", ticketAssegnati);
         return "user/show";
+    }
+
+    @PostMapping("/user/{id}/disponibilita")
+    public String cambiaDisponibilita(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+
+        User user = userService.findById(id);
+        List<Ticket> ticketAssegnati = ticketService.findByUser(user);
+
+        //STREAM: TRASFORMA LA LISTA IN FLUSSO DI ELEMENTI
+        //ANYMATCH:SI COLLEGA A STREAM PER VERIFICARE SE C'è ALMENO UN ELEMENTO TRUE O FALSE
+        //LAMBDA CHE ITERA OGNI TICKET PER VEDERE SE è COMPLETO
+        boolean ticketIncompleti = ticketAssegnati.stream()
+            .anyMatch(t -> t.getStato() != Stato.COMPLETATO);
+
+        if (!ticketIncompleti) {
+            user.setDisponibile(!user.isDisponibile());
+            userService.save(user);
+            redirectAttributes.addFlashAttribute("successMessage", "Disponibilità aggiornata con successo.");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Non puoi cambiare disponibilità perché hai ticket non completati.");
+        }
+
+        return "redirect:/user/" + id;
     }
     
     

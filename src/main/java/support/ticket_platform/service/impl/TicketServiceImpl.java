@@ -57,4 +57,5 @@ public class TicketServiceImpl implements TicketService {
     public List<Ticket> findByTitoloContainingIgnoreCase(String keyword) {
         return ticketRepository.findByTitoloContainingIgnoreCase(keyword);
     }
+
 }
