@@ -38,8 +38,21 @@ public class UserController {
         
         User user = userService.findById(id);
         List<Ticket> ticketAssegnati = ticketService.findByUser(user);
+
+        //FILTER TIENE CONTO SOLO DEI TICKET DELL'ESPRESIONE LAMBDA TRUE
+        //COUNT CONTA QUANTI SONO DA FARE
+        long countDaFare = ticketAssegnati.stream()
+        .filter(t -> t.getStato() == Stato.DA_FARE)
+        .count();
+
+        long countInCorso = ticketAssegnati.stream()
+        .filter(t -> t.getStato() == Stato.IN_CORSO)
+        .count();
+
         model.addAttribute("user", userService.findById(id));
         model.addAttribute("ticketAssegnati", ticketAssegnati);
+        model.addAttribute("countDaFare", countDaFare);
+        model.addAttribute("countInCorso", countInCorso);
         return "user/show";
     }
 
