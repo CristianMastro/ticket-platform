@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Nota {
@@ -18,6 +19,7 @@ public class Nota {
     private Long id;
 
     @Column(length = 2000)
+    @Size(max = 2000, message = "Il testo non può superare i 2000 caratteri.")
     private String testo;
 
     private String autore;

@@ -14,10 +14,13 @@
             <div class="mb-3">
                 <label for="testo" class="form-label">Inserisci testo</label>
                 <textarea id="testo" th:field="*{testo}" class="form-control" rows="5" required></textarea>
+                <div class="text-danger" th:if="${#fields.hasErrors('testo')}" th:errors="*{testo}"></div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Salva Nota</button>
-            <a th:href="@{/ticket/show/{id}(id=${ticket.id})}" class="btn btn-secondary ms-2">Annulla</a>
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-success text-black">Salva Nota</button>
+                <a th:href="@{/ticket/show/{id}(id=${ticket.id})}" class="btn btn-danger text-black ms-2">Annulla</a>
+            </div>
         </form>
     </div>
 </div>
