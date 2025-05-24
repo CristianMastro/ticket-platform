@@ -2,6 +2,8 @@ package support.ticket_platform.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +30,7 @@ public class Nota {
 
     @ManyToOne
     @JoinColumn(name = "ticket_id", nullable=false)
+    @JsonManagedReference
     private Ticket ticket;
 
     public Long getId() {

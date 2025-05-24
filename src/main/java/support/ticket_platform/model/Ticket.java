@@ -3,6 +3,8 @@ package support.ticket_platform.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -44,13 +46,16 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable=false)
+    @JsonBackReference(value = "cat-ticket")
     private Categoria categoria;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable=false)
+    @JsonBackReference(value = "user-ticket") 
     private User user;
 
     @OneToMany(mappedBy = "ticket")
+    @JsonBackReference
     private List<Nota> note;
 
     public String getTitolo() {
