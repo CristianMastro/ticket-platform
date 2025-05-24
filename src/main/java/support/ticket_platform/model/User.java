@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 
@@ -35,6 +37,9 @@ public class User {
     private String password;
 
     private boolean disponibile = true;
+
+    @ManyToMany(fetch= FetchType.EAGER)
+    private List<Role> roles;
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -106,5 +111,15 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    
 
 }
