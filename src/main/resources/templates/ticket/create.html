@@ -6,6 +6,10 @@
 
 <div class="container mt-5">
   <h1 class="mb-4 text-center">Crea un nuovo Ticket</h1>
+  
+  <div th:if="${errorMessage}" class="alert alert-danger text-center">
+      <p th:text="${errorMessage}"></p>
+  </div>
 
   <form th:action="@{/ticket/create}" th:object="${ticket}" method="post" novalidate>
     

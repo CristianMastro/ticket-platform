@@ -81,6 +81,13 @@ public class TicketController {
             return "ticket/create";
         }
 
+        // Controlla se ci sono utenti disponibili
+        List<User> utentiDisponibili = userService.findByDisponibile(true);
+        if (utentiDisponibili.isEmpty()) {
+            model.addAttribute("errorMessage", "Nessun operatore disponibile al momento. Impossibile creare il ticket.");
+            return "ticket/create";
+        }
+
         // Recupera l'utente completo dal DB tramite id selezionato
         User user = userService.findById(ticket.getUser().getId());
         ticket.setUser(user);
