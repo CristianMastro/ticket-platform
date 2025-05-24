@@ -12,15 +12,19 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
     
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+SecurityFilterChain filterChain(HttpSecurity http, CustomSuccessHandler customSuccessHandler) throws Exception {
     http.authorizeHttpRequests()
         .requestMatchers("/ticket/create", "/ticket/edit/**", "/delete/**", "/ticket/show/**", "/note/create", "/tickets").hasAuthority("ADMIN")
         .requestMatchers("/ticket/show/**", "/user/**", "/note/create").hasAuthority("USER")
         .requestMatchers("/**").permitAll()
-        .and().formLogin()
-        .and().logout();
-        return http.build();
-    }
+        .and()
+        .formLogin()
+            .successHandler(customSuccessHandler)  // qui aggiungi il redirect custom
+        .and()
+        .logout();
+
+    return http.build();
+}
 
     @Bean
     DatabaseUserDetailsService userDetailsService() {
