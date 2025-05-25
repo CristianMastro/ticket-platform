@@ -26,7 +26,11 @@
                         <span class="badge bg-danger" th:if="${!utente.disponibile}">Non disponibile</span>
                     </td>
                     <td>
-                        <a th:href="@{/user/{id}(id=${utente.id})}" class="btn btn-sm btn-success text-black">Dettagli</a>
+                        <a th:href="@{/user/{id}(id=${utente.id})}" class="" sec:authorize="!hasAuthority('ADMIN')"></a>
+                        <a th:href="@{/user/{id}(id=${utente.id})}"
+                                                        class="btn btn-sm btn-success text-black"
+                                                        sec:authorize="hasAuthority('USER')"
+                                                        th:if="${utente.id == loggedUser.id}">Il mio Dettaglio</a>
                     </td>
                 </tr>
             </tbody>

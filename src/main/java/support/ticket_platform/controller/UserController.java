@@ -1,5 +1,6 @@
 package support.ticket_platform.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,24 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("utenti", userService.findAll());
+    public String index(Model model, Principal principal) {
+    
+        List<User> allUsers = userService.findAll();
+
+        // FILTRA PER UTENTI CHE NON SONO ADMIN
+        List<User> utenti = allUsers.stream()
+            .filter(user -> user.getRoles().stream()
+                .noneMatch(ruolo -> ruolo.getName().equals("ADMIN")))
+            .toList();
+
+        model.addAttribute("utenti", utenti);
+
+        // PASSA USER LOGGATO
+        userService.findByUsername(principal.getName())
+                .ifPresent(u -> model.addAttribute("loggedUser", u));
+
         return "user/index";
-    }
+    } 
 
     @GetMapping("/user/{id}")
     public String show(@PathVariable("id") Long id, Model model) {

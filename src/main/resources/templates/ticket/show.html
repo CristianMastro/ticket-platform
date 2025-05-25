@@ -11,7 +11,7 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3 class="card-title m-0 text-break" th:text="${ticket.id} + ' Ticket'"></h3>
 
-                <form th:action="@{/ticket/stato/{id}(id=${ticket.id})}" method="post" class="d-flex align-items-center gap-2">
+                <form th:action="@{/ticket/stato/{id}(id=${ticket.id})}" sec:authorize="!hasAuthority('ADMIN')" method="post" class="d-flex align-items-center gap-2">
                     <select name="stato" class="form-select form-select-sm" style="width: auto;">
                         <option th:each="s : ${stati}"
                                 th:value="${s}"

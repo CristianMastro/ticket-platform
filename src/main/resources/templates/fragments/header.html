@@ -10,6 +10,7 @@
             
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
+                    <a th:href="@{/tickets}" sec:authorize="hasAuthority('ADMIN')" class="text-black">Home Admin</a>
                 </div>
                 <div class="navbar-nav ms-auto d-flex">
                     <form th:action="@{/logout}" method="post" class="d-flex">

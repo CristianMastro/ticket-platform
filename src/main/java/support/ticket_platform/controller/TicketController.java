@@ -63,9 +63,15 @@ public class TicketController {
         ticket.setUser(new User());
         ticket.setCategoria(new Categoria());
 
+        // RECUPERA UTENTI DISPONIBILI CHE NON SONO ADMIN
+        List<User> utentiDisponibili = userService.findByDisponibile(true).stream()
+        .filter(user -> user.getRoles().stream()
+            .noneMatch(role -> role.getName().equals("ADMIN")))
+        .toList();
+
         model.addAttribute("ticket", ticket);
         model.addAttribute("categorie", categoriaService.findAll());
-        model.addAttribute("utentiDisponibili", userService.findByDisponibile(true));
+        model.addAttribute("utentiDisponibili", utentiDisponibili);
         return "ticket/create";
     }
 
