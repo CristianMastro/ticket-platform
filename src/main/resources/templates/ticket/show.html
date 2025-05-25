@@ -12,14 +12,13 @@
                 <h3 class="card-title m-0 text-break" th:text="${ticket.id} + ' Ticket'"></h3>
 
                 <form th:action="@{/ticket/stato/{id}(id=${ticket.id})}" sec:authorize="!hasAuthority('ADMIN')" method="post" class="d-flex align-items-center gap-2">
-                    <select name="stato" class="form-select form-select-sm" style="width: auto;">
+                    <select name="stato" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
                         <option th:each="s : ${stati}"
                                 th:value="${s}"
                                 th:text="${s.displayValue}"
                                 th:selected="${s == ticket.stato}">
                         </option>
                     </select>
-                    <button type="submit" class="btn btn-sm btn-primary text-black">Aggiorna</button>
                 </form>
             </div>
 

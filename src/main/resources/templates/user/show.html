@@ -56,7 +56,7 @@
                         <tr th:each="ticket : ${ticketAssegnati}">
                             <td th:text="${ticket.id}"></td>
                             <td th:text="${ticket.titolo.length() > 10 ? ticket.titolo.substring(0, 10) + '...' : ticket.titolo}"></td>
-                            <td th:text="${ticket.stato}"></td>
+                            <td th:text="${ticket.stato.displayValue}"></td>
                             <td>
                                 <a th:href="@{/ticket/show/{id}(id=${ticket.id})}" class="btn btn-sm btn-success text-black mb-1">Dettagli</a>
                             </td>
