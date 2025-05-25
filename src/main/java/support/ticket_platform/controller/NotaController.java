@@ -30,12 +30,15 @@ public class NotaController {
     private TicketService ticketService;
 
     //GET PER FORM NOTE
-    @GetMapping("/note/create")
+    @GetMapping("/note/create")                                    //CON MODEL PASSIAMO I DATI ALLA PAGINA HTML CON THYMELEAF
     public String create(@RequestParam("ticketId") Long ticketId, Model model) {
 
+        //CREA UN OGGETTO NOTA VUOTO PER POPOLARE IL FORM E LO ASSOCIA AD UN TICKET
         Nota nota = new Nota();
         Ticket ticket = ticketService.findById(ticketId);
         nota.setTicket(ticket);
+
+        //AGGIUNGONO I DATI DA PASSARE AL TEMPLATE THYMELEAF
         model.addAttribute("nota", nota);
         model.addAttribute("ticket", ticket);
         return "nota/create";
@@ -43,29 +46,33 @@ public class NotaController {
 
 
 
-    //POST PER FORM NOTE (DA SISTEMARE QUANDO IMPLEMENTO SECURITY)
+    //POST PER FORM NOTE 
+    //VALID, VALIDA I DATI PRESI DAL FORM
+    //BINDING VERIFICA SE CI SONO ERRORI E MOSTRA UN MESSAGGIO NEL CAMPO ERRATO
+    //PRINCIPAL PRENDE LE INFORMAZIONI DELL'UTENTE LOGGATO
     @PostMapping("/note/create")
     public String create(@Valid @ModelAttribute("nota") Nota nota,
                        BindingResult bindingResult,
                        Model model, Principal principal) {
-
+        
+        //SE CI SONO ERRORI MOSTRA IL MESSAGGIO SETTATO NELLA PAGINA HTML E RITORNA ALLA PAGINA DI CREAZIONE
         if (bindingResult.hasErrors()) {
             model.addAttribute("ticket",
                     ticketService.findById(nota.getTicket().getId()));
             return "nota/create";
         }
 
-        // recupera ticket
+        // ASSOCIA IL TICKET ALLA NOTA
         Ticket ticket = ticketService.findById(nota.getTicket().getId());
         nota.setTicket(ticket);
 
-        // autore default prima della security
+        // ASSOCIA L'USER CHE STA CREANDO LA NOTA
         nota.setAutore(principal.getName());
 
-        // imposta la data
+        // IMPOSTA LA DATA DI CREAZIONE
         nota.setDataCreazione(LocalDateTime.now());
 
-        // salvataggio
+        // SALVA E REINDIRIZZA ALLA PAGINA DEL TICKET
         notaService.save(nota);
         return "redirect:/ticket/show/" + ticket.getId();
     }
@@ -84,8 +91,10 @@ public class NotaController {
     @GetMapping("note/edit/{id}")
     public String editNote(@PathVariable("id") Long id, Model model) {
         
+        //RECUPERA LA NOTA CON L'ID
         Nota nota = notaService.findById(id);
 
+        //PASSA IL MODELLO ALLA VIEW
         model.addAttribute("nota", nota);
         
         return "nota/edit";
@@ -97,20 +106,22 @@ public class NotaController {
                          Model model,
                          Principal principal) {
 
-    // Validazione
+    // SE CI SONO ERRORI MOSTRA RITORNA ALLA PAGINA DI MODIFICA E MOSTRA ERRORE
     if (bindingResult.hasErrors()) {
         return "note/edit";
     }
 
-    // Recupera il ticket associato
+    //RECUPERA IL TICKET ASSOCIATO E LO RIASSOCIA
     Ticket ticket = ticketService.findById(nota.getTicket().getId());
     nota.setTicket(ticket);
 
+    //AGGIORNA AUTORE DELLA NOTA CON L'USER CHE LA STA MODIFICANDO
     nota.setAutore(principal.getName());
-
+    
+    //AGGIORNA LA DATA
     nota.setDataCreazione(LocalDateTime.now());
 
-    // Salva la modifica
+    //SALVA E RITORNA ALLA PAGINA DI DETTAGLIO DEI TICKET
     notaService.save(nota);
 
     return "redirect:/ticket/show/" + ticket.getId();

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
 import support.ticket_platform.model.Categoria;
@@ -41,16 +42,19 @@ public class TicketController {
     private NotaService notaService;
 
     //GET PER LISTA DI TICKET
-    @GetMapping("/tickets")
+    @GetMapping("/tickets")     //RICEVE UN PARAMETRO DALLA QUERY STRING PER FILTRARE TICKET, NON + OBBLIGATORIO
     public String listTickets(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
 
-        //RICERCA PER NOME
+        //RICERCA PER NOME TRAMITE IL METODO
         List<Ticket> tickets;
+
+        //SE IL TITOLO CONTIENE LA KEYWORD TROVA TUTTI I TICKET CON QUEL NOME ALTRIMENTI PRENDE TUTTI
         if (keyword != null && !keyword.isEmpty()) {
             tickets = ticketService.findByTitoloContainingIgnoreCase(keyword);
         } else {
             tickets = ticketService.findAll();
         }
+
         model.addAttribute("tickets", tickets);
         return "ticket/index";
     }
@@ -58,17 +62,21 @@ public class TicketController {
     //GET PER CREAZIONE
     @GetMapping("/ticket/create")
     public String create(Model model) {
-   
+
+
+        //CREA UN TICKET VUOTO CON USER E CATEGORIE PER EVITARE ERRORI NEL FORM
         Ticket ticket = new Ticket();
         ticket.setUser(new User());
         ticket.setCategoria(new Categoria());
 
-        // RECUPERA UTENTI DISPONIBILI CHE NON SONO ADMIN
+        //RECUPERA GLI UTENTI CHE SONO DISPONIBILI
+        //E POI FILTRA GLI UTENTI PER QUELLI CHE NON SONO ADMIN
         List<User> utentiDisponibili = userService.findByDisponibile(true).stream()
         .filter(user -> user.getRoles().stream()
             .noneMatch(role -> role.getName().equals("ADMIN")))
         .toList();
 
+        //AGGIUNGE AL MODELLO I DATI PER IL FORM
         model.addAttribute("ticket", ticket);
         model.addAttribute("categorie", categoriaService.findAll());
         model.addAttribute("utentiDisponibili", utentiDisponibili);
@@ -80,40 +88,40 @@ public class TicketController {
     public String create(@Valid @ModelAttribute("ticket") Ticket ticket, 
                                 BindingResult bindingResult, Model model) {
 
-        // Se ci sono errori di validazione torna al form con i dati necessari
+        //CONTROLLA GLI ERRORI SUL FORM AL MOMENTO DELLA POST E MOSTRA UN ERRORE RICARICANDO LA PAGINA DI CREAZIONE
         if (bindingResult.hasErrors()) {
             model.addAttribute("categorie", categoriaService.findAll());
             model.addAttribute("utentiDisponibili", userService.findByDisponibile(true));
             return "ticket/create";
         }
 
-        // Controlla se ci sono utenti disponibili
+        //CONTROLLA SE CI SONO UTENTI DISPONIBILI E MODELLA UN MESSAGGIO DI ERRORE AL MOMENTO DI INVIO DEL FORM
         List<User> utentiDisponibili = userService.findByDisponibile(true);
         if (utentiDisponibili.isEmpty()) {
             model.addAttribute("errorMessage", "Nessun operatore disponibile al momento. Impossibile creare il ticket.");
             return "ticket/create";
         }
 
-        // Recupera l'utente completo dal DB tramite id selezionato
+        //RECUPERA L'UTENTE DAL DB
         User user = userService.findById(ticket.getUser().getId());
         ticket.setUser(user);
 
-        // Recupera la categoria completa dal DB tramite id selezionato
+        //RECUPERA LA CATEGORIA
         Categoria categoria = categoriaService.findById(ticket.getCategoria().getId());
         ticket.setCategoria(categoria);
 
-        // Imposta la data di creazione con l'ora corrente
+        //IMPOSTA DATA
         ticket.setDataCreazione(LocalDateTime.now());
 
-        // Imposta lo stato di default (es. DA_FARE) se non è stato già settato
+        //IMPOSTA LO STATO DA FARE PER OGNI TICKET CREATO
         if (ticket.getStato() == null) {
             ticket.setStato(Ticket.Stato.DA_FARE);
         }
 
-        // Salva il ticket
+        //SALVA
         ticketService.save(ticket);
 
-        // Redirect alla lista ticket dopo il salvataggio
+        //RITORNA ALLA PAGINA DEI TICKET
         return "redirect:/tickets";
     }
 
@@ -134,7 +142,7 @@ public class TicketController {
     public String edit(@PathVariable Long id,
                             @Valid @ModelAttribute("ticket") Ticket ticket,
                            BindingResult bindingResult,
-                           Model model) {
+                           Model model, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("categorie", categoriaService.findAll());
@@ -142,27 +150,28 @@ public class TicketController {
             return "ticket/edit";
         }
 
-        // Recupera il ticket originale dal DB
+        //RECUPERA IL TICKET DAL DB
         Ticket ticketCopia = ticketService.findById(id);
 
-        // Aggiorna i campi modificabili
+        //SE LO STATO DEL TICKET E' COMPLETATO NON FA MODIFICARE E MOSTRA UN MESSAGGIO D'ERRORE
+        if (ticketCopia.getStato() == Ticket.Stato.COMPLETATO) {
+            redirectAttributes.addFlashAttribute("errorMessage","Il ticket è già completato e non può essere modificato.");
+            return "redirect:/tickets";
+        }
+
+        //AGGIORNA TITOLO E DESCRIZIONE
         ticketCopia.setTitolo(ticket.getTitolo());
         ticketCopia.setDescrizione(ticket.getDescrizione());
 
-        // Recupera e imposta l'utente 
+        //RECUPERA E REIMPOSTA L'UTENTE
         User user = userService.findById(ticket.getUser().getId());
         ticketCopia.setUser(user);
 
-        // Recupera e imposta la categoria
+        //RECUPERA LE CATEGORIA E LA REIMPOSTA
         Categoria categoria = categoriaService.findById(ticket.getCategoria().getId());
         ticketCopia.setCategoria(categoria);
 
-        //copia lo stato
-        if (ticket.getStato() == null) {
-        ticket.setStato(Ticket.Stato.DA_FARE);
-        }
-
-        // Salva 
+        //SALVA
         ticketService.save(ticketCopia);
 
         return "redirect:/tickets";

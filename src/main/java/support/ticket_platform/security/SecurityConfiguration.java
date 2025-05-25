@@ -25,7 +25,7 @@ public class SecurityConfiguration {
         .logout();
 
     return http.build();
-}
+    }
 
     @Bean
     DatabaseUserDetailsService userDetailsService() {

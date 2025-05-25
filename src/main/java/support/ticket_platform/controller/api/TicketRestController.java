@@ -29,25 +29,29 @@ public class TicketRestController {
     @GetMapping
     public List<Ticket> getTickets() {
 
+        //RITORNA TUTTI I TICKET
         return ticketService.findAll();
     }
 
     @GetMapping("/categoria")
     public List<Ticket> getTicketsByCategoria(@RequestParam String categoria) {
 
-        //RECUPERA TUTTE LE CATEGORIE
+        //RECUPERA TUTTE LE CATEGORIE CON FINDALL
+        //CON STREAM RECUPERO LA SEQUENZA DEGLI ELEMENTI
+        //CON LAMBDA PRENDO OGNI OGGETTO DI CATEGORIA E LO CONVERTE IN MINUSCOLO
+        //COLLECT TRASFORMA TUTTO IN LISTA DI STRINGHE PER IL CONFRONTO
         List<String> categorieValide = categoriaService.findAll()
             .stream()
             .map(c -> c.getTipo().toLowerCase()) 
             .collect(Collectors.toList());
 
-        // CONTROLLA SE LA STRINGA INSERITA è VALIDA
+        // CONTROLLA SE LA STRINGA INSERITA è VALIDA E LANCIA ERRORE SE INSERITA CATEGORIA SBAGLIATA
         if (!categorieValide.contains(categoria.toLowerCase())) {
             throw new IllegalArgumentException("Categoria non valida: " + categoria +
                 ". Categorie disponibili: " + String.join(", ", categorieValide));
         }
 
-        // RITORNA UNA LISTA DELLA CATEGORIA SCELTA
+        // RITORNA UNA LISTA DI TICKET DELLA CATEGORIA SCELTA 
         return ticketService.findAll().stream()
             .filter(t -> t.getCategoria().getTipo().equalsIgnoreCase(categoria))
             .collect(Collectors.toList());
@@ -57,17 +61,20 @@ public class TicketRestController {
     public List<Ticket> getTicketsByStato(@RequestParam String stato) {
         
         try {
-            //CONTROLLA LA STRINGA E RITORNA LA LISTA DEI TICKET CON STATO SCELTO
+            //TRASFORMA I VALORI ENUM IN MINUSCOLO E DA VALORE ALLE STRINGHE
+            //PRENDE TUTTI I VALORI E FILTRA IN BASE ALLO STATO INSERITO
             Ticket.Stato statoEnum = Ticket.Stato.valueOf(stato.toUpperCase());
             return ticketService.findAll().stream()
                     .filter(t -> t.getStato() == statoEnum)
                     .collect(Collectors.toList());
 
+        //DA UN ERRORE SE NON è INSERITO LO STATO CORRETTO
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Stato non valido: " + stato + ". Stati diponibili: da_fare, in_corso o completato.");
         }
     }
 
+    //SERVE PER INTERCETTARE L'ERRORE E GESTIRLO CON UN ERRORE CUSTOMIZZATO
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleInvalidParam(IllegalArgumentException ex) {
         return ResponseEntity
