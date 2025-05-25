@@ -2,6 +2,7 @@ package support.ticket_platform.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import support.ticket_platform.model.Nota;
@@ -11,11 +12,8 @@ import support.ticket_platform.service.NotaService;
 @Service
 public class NotaServiceImpl implements NotaService {
     
-    private final NotaRepository notaRepository;
-
-    public NotaServiceImpl(NotaRepository notaRepository) {
-        this.notaRepository = notaRepository;
-    }
+    @Autowired
+    private NotaRepository notaRepository;
 
     @Override
     public Nota save(Nota nota) {

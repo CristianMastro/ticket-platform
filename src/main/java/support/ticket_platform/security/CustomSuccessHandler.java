@@ -30,12 +30,6 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
         String username = authentication.getName();
         Optional<User> optionalUser = userService.findByUsername(username);
-        if (optionalUser.isEmpty()) {
-            // Se non trovi l'utente, reindirizza a una pagina di errore o logout
-            response.sendRedirect("/login?error");
-            return;
-        }
-
         User user = optionalUser.get();
         Long userId = user.getId();
 
