@@ -1,5 +1,6 @@
 package support.ticket_platform.controller;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import support.ticket_platform.model.Nota;
 import support.ticket_platform.model.Ticket;
 import support.ticket_platform.service.NotaService;
 import support.ticket_platform.service.TicketService;
+
 
 @Controller
 public class NotaController {
@@ -39,11 +41,13 @@ public class NotaController {
         return "nota/create";
     }
 
+
+
     //POST PER FORM NOTE (DA SISTEMARE QUANDO IMPLEMENTO SECURITY)
     @PostMapping("/note/create")
     public String create(@Valid @ModelAttribute("nota") Nota nota,
                        BindingResult bindingResult,
-                       Model model) {
+                       Model model, Principal principal) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("ticket",
@@ -56,7 +60,7 @@ public class NotaController {
         nota.setTicket(ticket);
 
         // autore default prima della security
-        nota.setAutore("SYSTEM");
+        nota.setAutore(principal.getName());
 
         // imposta la data
         nota.setDataCreazione(LocalDateTime.now());
@@ -75,4 +79,41 @@ public class NotaController {
             notaService.deleteById(id);
             return "redirect:/ticket/show/" + ticketId;
         }
+
+    //GET PER LETTURA NOTE IN MODIFICA
+    @GetMapping("note/edit/{id}")
+    public String editNote(@PathVariable("id") Long id, Model model) {
+        
+        Nota nota = notaService.findById(id);
+
+        model.addAttribute("nota", nota);
+        
+        return "nota/edit";
+    }
+
+    @PostMapping("/note/update")
+    public String updateNota(@Valid @ModelAttribute("nota") Nota nota,
+                         BindingResult bindingResult,
+                         Model model,
+                         Principal principal) {
+
+    // Validazione
+    if (bindingResult.hasErrors()) {
+        return "note/edit";
+    }
+
+    // Recupera il ticket associato
+    Ticket ticket = ticketService.findById(nota.getTicket().getId());
+    nota.setTicket(ticket);
+
+    nota.setAutore(principal.getName());
+
+    nota.setDataCreazione(LocalDateTime.now());
+
+    // Salva la modifica
+    notaService.save(nota);
+
+    return "redirect:/ticket/show/" + ticket.getId();
+    }
+    
 }

@@ -62,7 +62,7 @@ public class UserController {
 
         long countInCorso = ticketAssegnati.stream()
         .filter(t -> t.getStato() == Stato.IN_CORSO)
-        .count();
+        .count();        
 
         model.addAttribute("user", userService.findById(id));
         model.addAttribute("ticketAssegnati", ticketAssegnati);

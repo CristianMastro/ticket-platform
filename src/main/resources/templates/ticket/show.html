@@ -52,8 +52,13 @@
             </ul>
 
             <div class="text-center mt-4">
-                <a th:href="@{/tickets}" class="btn btn-secondary">Torna alla lista</a>
-            </div>
+                <a th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"
+                    th:href="@{/tickets}" class="btn btn-secondary">Torna ai ticket
+                </a>
+                <a th:if="${#authorization.expression('hasAuthority(''USER'')')}"
+                    th:href="@{/user/{id}(id=${#authentication.principal.id})}" class="btn btn-secondary">Torna alla lista
+                </a>
+            </div>        
         </div>
 
         <!-- CARD NOTE -->
@@ -72,12 +77,11 @@
                             <small class="text-muted">
                                 Scritta da: 
                                 <span th:if="${nota.autore != null}" th:text="${nota.autore}"></span>
-                                <span th:if="${nota.autore == null}">SYSTEM</span>
                                 -
                                 <span th:text="${#temporals.format(nota.dataCreazione, 'dd/MM/yyyy')}"></span>
                             </small>
                             <div style="white-space: nowrap;">
-                                <a th:href="@{'/note/edit/' + ${nota.id}}" class="btn btn-sm btn-warning text-black me-2">
+                                <a th:href="@{/note/edit/{id}(id=${nota.id})}" class="btn btn-sm btn-warning text-black me-2">
                                     Modifica
                                 </a>
                                 <form th:action="@{/note/delete/{id}(id=${nota.id})}" method="post" style="display:inline;">
