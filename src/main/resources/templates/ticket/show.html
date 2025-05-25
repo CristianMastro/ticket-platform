@@ -15,7 +15,7 @@
                     <select name="stato" class="form-select form-select-sm" style="width: auto;">
                         <option th:each="s : ${stati}"
                                 th:value="${s}"
-                                th:text="${s}"
+                                th:text="${s.displayValue}"
                                 th:selected="${s == ticket.stato}">
                         </option>
                     </select>
@@ -39,7 +39,7 @@
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
                     <strong>Stato:</strong>
-                    <span th:text="${ticket.stato}"></span>
+                    <span th:text="${ticket.stato.displayValue}"></span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
                     <strong>Data creazione:</strong>

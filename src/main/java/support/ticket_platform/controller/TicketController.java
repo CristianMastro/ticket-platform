@@ -205,6 +205,7 @@ public class TicketController {
     @PostMapping("/ticket/stato/{id}")
     public String updateStato(@PathVariable Long id, @RequestParam("stato") Stato stato) {
         
+        //RECUPERA IL TICKET E LO SALVA
         Ticket ticket = ticketService.findById(id);
         ticket.setStato(stato);
         ticketService.save(ticket);

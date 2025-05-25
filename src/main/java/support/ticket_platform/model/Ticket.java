@@ -22,8 +22,27 @@ import jakarta.validation.constraints.Size;
 public class Ticket {
 
     public enum Stato {
-        DA_FARE, IN_CORSO, COMPLETATO
+    COMPLETATO("COMPLETATO"), 
+    IN_CORSO("IN CORSO"), 
+    DA_FARE("DA FARE");
+
+    
+        private final String displayValue;
+        
+        private Stato(String displayValue) {
+            this.displayValue = displayValue;
+        }
+        
+        public String getDisplayValue() {
+            return displayValue;
+        }
     }
+
+    // // public enum Stato {
+    //     DA_FARE,
+    //     IN_CORSO,
+    //     COMPLETATO
+    // }
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -143,5 +162,6 @@ public class Ticket {
                 '}';
     }
 
+    
     
 }
