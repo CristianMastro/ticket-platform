@@ -16,10 +16,11 @@ public class SecurityConfiguration {
     http.authorizeHttpRequests()
         .requestMatchers("/ticket/create", "/ticket/edit/**", "/delete/**", "/tickets").hasAuthority("ADMIN")
         .requestMatchers("/ticket/show/**", "/user/**", "/note/create").hasAnyAuthority("USER","ADMIN")
+        .requestMatchers("/api/**").permitAll()
         .requestMatchers("/**").authenticated()
         .and()
         .formLogin()
-            .successHandler(customSuccessHandler)  // qui aggiungi il redirect custom
+            .successHandler(customSuccessHandler) 
         .and()
         .logout();
 
