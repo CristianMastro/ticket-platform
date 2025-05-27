@@ -15,7 +15,8 @@ public class SecurityConfiguration {
     SecurityFilterChain filterChain(HttpSecurity http, CustomSuccessHandler customSuccessHandler) throws Exception {
     http.authorizeHttpRequests()
         .requestMatchers("/ticket/create", "/ticket/edit/**", "/delete/**", "/tickets").hasAuthority("ADMIN")
-        .requestMatchers("/ticket/show/**", "/user/**", "/note/create").hasAnyAuthority("USER","ADMIN")
+        .requestMatchers("/ticket/show/**", "/note/create").hasAnyAuthority("USER","ADMIN")
+        .requestMatchers( "/user/**").hasAnyAuthority("USER")
         .requestMatchers("/api/**").permitAll()
         .requestMatchers("/**").authenticated()
         .and()

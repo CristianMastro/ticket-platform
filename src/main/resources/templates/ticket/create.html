@@ -39,7 +39,8 @@
             <option value="" disabled selected>-- Seleziona un operatore --</option>
             <option th:each="u : ${utentiDisponibili}"
                     th:value="${u.id}"
-                    th:text="${u.id + ' ' + u.username}"></option>
+                    th:text="${u.id + ' ' + u.username}">
+            </option>
         </select>
         <div class="invalid-feedback" th:errors="*{user.id}"></div>
     </div>
